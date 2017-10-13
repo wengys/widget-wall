@@ -26,8 +26,8 @@ export interface WidgetDisplayConfig extends WidgetSize {
  * 小组件配置
  */
 export interface WidgetConfig {
-    id: string;
-    catalog: string;
-    type: string;
-    display: WidgetDisplayConfig;
+    getId(): string;
+    getCatalog(): string;
+    getType(): string;
+    getDisplay(): WidgetDisplayConfig;
 }

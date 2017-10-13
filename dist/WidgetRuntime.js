@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 import { SimpleEventEmitter } from "se-emitter";
 import { WidgetRuntimeEvents } from "./WidgetRuntimeEvents";
 /**
- * С�������ʱ
+ * 小组件运行时
  */
 var WidgetRuntime = /** @class */ (function (_super) {
     __extends(WidgetRuntime, _super);
@@ -20,13 +20,9 @@ var WidgetRuntime = /** @class */ (function (_super) {
         _this._context = ctx;
         return _this;
     }
-    Object.defineProperty(WidgetRuntime.prototype, "context", {
-        get: function () {
-            return this._context;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    WidgetRuntime.prototype.getContext = function () {
+        return this._context;
+    };
     WidgetRuntime.prototype.setContext = function (key, value, raiseEvent) {
         if (raiseEvent === void 0) { raiseEvent = false; }
         var oldValue = this._context[key];

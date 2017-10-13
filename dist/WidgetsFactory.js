@@ -4,8 +4,8 @@ var WidgetsFactory = /** @class */ (function () {
         this.widgetFactories = widgetFactories;
     }
     WidgetsFactory.prototype.create = function (instanceConfig, runtime) {
-        var widgetType = instanceConfig.type;
-        var factory = _.find(this.widgetFactories, function (w) { return w.type == widgetType; });
+        var widgetType = instanceConfig.getType();
+        var factory = _.find(this.widgetFactories, function (w) { return w.getType() == widgetType; });
         if (!factory) {
             throw new Error("unknown widget: " + widgetType);
         }
@@ -14,7 +14,7 @@ var WidgetsFactory = /** @class */ (function () {
         return instance;
     };
     WidgetsFactory.prototype.createStub = function (widgetType, instanceConfig) {
-        var factory = _.find(this.widgetFactories, function (w) { return w.type == widgetType; });
+        var factory = _.find(this.widgetFactories, function (w) { return w.getType() == widgetType; });
         if (!factory) {
             throw new Error("unknown widget: " + widgetType);
         }

@@ -4,7 +4,7 @@ import { WidgetRuntimeEvents } from "./WidgetRuntimeEvents";
 
 
 /**
- * С�������ʱ
+ * 小组件运行时
  */
 export abstract class WidgetRuntime extends SimpleEventEmitter {
     private _context: { [indexer: string]: any }
@@ -13,7 +13,7 @@ export abstract class WidgetRuntime extends SimpleEventEmitter {
         super();
         this._context = ctx
     }
-    get context(): { [indexer: string]: any } {
+    getContext(): { [indexer: string]: any } {
         return this._context;
     }
     setContext(key: string, value: any, raiseEvent = false) {
