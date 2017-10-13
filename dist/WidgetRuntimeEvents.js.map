@@ -1,0 +1,1 @@
+{"version":3,"file":"WidgetRuntimeEvents.js","sourceRoot":"","sources":["../src/WidgetRuntimeEvents.ts"],"names":[],"mappings":"AACA;;GAEG;AACH,MAAM,CAAC,IAAI,mBAAmB,GAAG;IAC7B,OAAO,EAAE;QACL,aAAa,EAAE,wBAAwB;QACvC,gBAAgB,EAAE,4BAA4B;QAC9C,oBAAoB,EAAE,gCAAgC;KACzD;IACD,SAAS,EAAE;QACP,cAAc,EAAE,4BAA4B;KAC/C;CACJ,CAAA"}
