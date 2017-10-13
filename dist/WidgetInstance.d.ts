@@ -26,6 +26,10 @@ export interface WidgetConfigStub {
     getCol(): number;
     getRowspan(): number;
     getColspan(): number;
+    setRow(value:number): void;
+    setCol(value:number): void;
+    setRowspan(value:number): void;
+    setColspan(value:number): void;
 }
 /**
  * 小组件定义
