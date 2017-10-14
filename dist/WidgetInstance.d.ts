@@ -6,8 +6,8 @@ import { SimpleEventEmitter } from "se-emitter";
  * 小组件实例
  */
 export interface WidgetInstance extends WidgetConfig {
-    getCatalogText(): string;
-    getTypeText(): string;
+    catelogText: string;
+    typeText: string;
     render(container: HTMLDivElement): PromiseLike<void>;
     bind(runtime: WidgetRuntime): void;
 }
@@ -15,10 +15,10 @@ export interface WidgetInstance extends WidgetConfig {
  * 小组件配置用桩
  */
 export interface WidgetConfigStub {
-    getCatalog(): string;
-    getType(): string;
-    getCatalogText(): string;
-    getTypeText(): string;
+    catelog: string;
+    type: string;
+    catelogText: string;
+    typeText: string;
     bind(source: SimpleEventEmitter): void;
     render(container: HTMLDivElement): void;
     toProfile(): WidgetSection;
@@ -26,17 +26,17 @@ export interface WidgetConfigStub {
     getCol(): number;
     getRowspan(): number;
     getColspan(): number;
-    setRow(value:number): void;
-    setCol(value:number): void;
-    setRowspan(value:number): void;
-    setColspan(value:number): void;
+    setRow(value: number): void;
+    setCol(value: number): void;
+    setRowspan(value: number): void;
+    setColspan(value: number): void;
 }
 /**
  * 小组件定义
  */
 export interface WidgetDefinition {
-    getCatalog(): string;
-    getType(): string;
+    catelog: string;
+    type: string;
     /**
      * 创建小组件实例
      */

@@ -55,7 +55,7 @@ var WidgetContainer = /** @class */ (function (_super) {
     WidgetContainer.prototype.renderWidgets = function (widgets) {
         var _this = this;
         _.each(widgets, function (widget) {
-            var $widgetContainer = $("#" + widget.getId());
+            var $widgetContainer = $("#" + widget.id);
             var $widget = $($widgetContainer.find(".widget").get(0));
             widget.render($widget.get(0)).then(function () {
                 $widget.removeClass("widget-loading");
@@ -70,10 +70,10 @@ var WidgetContainer = /** @class */ (function (_super) {
     WidgetContainer.prototype.appendWidgetNodes = function (widgets) {
         var _this = this;
         _.each(widgets, function (widget) {
-            var $widgetContainer = $("<div id=\"" + widget.getId() + "\" class=\"widget-wrapper\"><div class=\"widget widget-catalog-" + widget.getCatalog() + " widget-" + widget.getType() + " widget-loading\"></div></div>");
+            var $widgetContainer = $("<div id=\"" + widget.id + "\" class=\"widget-wrapper\"><div class=\"widget widget-catelog-" + widget.catelog + " widget-" + widget.type + " widget-loading\"></div></div>");
             var $widget = $($widgetContainer.find(".widget").get(0));
-            if (widget.getTypeText()) {
-                $widgetContainer.prepend("<div class=\"widget-head\">" + widget.getTypeText() + "</div>").addClass("widget-title-padding");
+            if (widget.typeText) {
+                $widgetContainer.prepend("<div class=\"widget-head\">" + widget.typeText + "</div>").addClass("widget-title-padding");
             }
             $(_this.widgetContainerId).append($widgetContainer);
         });
@@ -113,10 +113,10 @@ var WidgetContainer = /** @class */ (function (_super) {
      */
     WidgetContainer.prototype.updateWidgetStyle = function (widget, unitSize) {
         if (isGrid(this.displayMode)) {
-            $("#" + widget.getId()).css("top", widget.getDisplay().row * unitSize.height + "px")
-                .css("left", widget.getDisplay().col * unitSize.width + "px")
-                .css("width", widget.getDisplay().colspan * unitSize.width + "px")
-                .css("height", widget.getDisplay().rowspan * unitSize.height + "px");
+            $("#" + widget.id).css("top", widget.display.row * unitSize.height + "px")
+                .css("left", widget.display.col * unitSize.width + "px")
+                .css("width", widget.display.colspan * unitSize.width + "px")
+                .css("height", widget.display.rowspan * unitSize.height + "px");
         }
     };
     /**

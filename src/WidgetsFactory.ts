@@ -12,8 +12,8 @@ export class WidgetsFactory {
     }
 
     public create(instanceConfig: WidgetConfig, runtime: WidgetRuntime): WidgetInstance {
-        let widgetType = instanceConfig.getType();
-        let factory = _.find(this.widgetFactories, (w) => w.getType() == widgetType)
+        let widgetType = instanceConfig.type;
+        let factory = _.find(this.widgetFactories, (w) => w.type == widgetType)
         if (!factory) {
             throw new Error("unknown widget: " + widgetType);
         }
@@ -23,7 +23,7 @@ export class WidgetsFactory {
     }
 
     public createStub(widgetType: string, instanceConfig?: WidgetSection): WidgetConfigStub {
-        let factory = _.find(this.widgetFactories, (w) => w.getType() == widgetType)
+        let factory = _.find(this.widgetFactories, (w) => w.type == widgetType)
         if (!factory) {
             throw new Error("unknown widget: " + widgetType);
         }
