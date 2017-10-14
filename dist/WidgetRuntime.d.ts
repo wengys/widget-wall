@@ -8,9 +8,7 @@ export declare abstract class WidgetRuntime extends SimpleEventEmitter {
     constructor(ctx: {
         [indexer: string]: any;
     });
-    getContext(): {
-        [indexer: string]: any;
-    };
+    getContext(key: string): any;
     setContext(key: string, value: any, raiseEvent?: boolean): void;
     notifyWidgetsSizeChange(displayMode: LayoutMode): void;
 }

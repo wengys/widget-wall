@@ -20,8 +20,8 @@ var WidgetRuntime = /** @class */ (function (_super) {
         _this._context = ctx;
         return _this;
     }
-    WidgetRuntime.prototype.getContext = function () {
-        return this._context;
+    WidgetRuntime.prototype.getContext = function (key) {
+        return this._context[key];
     };
     WidgetRuntime.prototype.setContext = function (key, value, raiseEvent) {
         if (raiseEvent === void 0) { raiseEvent = false; }

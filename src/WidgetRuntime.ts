@@ -13,8 +13,8 @@ export abstract class WidgetRuntime extends SimpleEventEmitter {
         super();
         this._context = ctx
     }
-    getContext(): { [indexer: string]: any } {
-        return this._context;
+    getContext(key:string) {
+        return this._context[key];
     }
     setContext(key: string, value: any, raiseEvent = false) {
         let oldValue = this._context[key];
