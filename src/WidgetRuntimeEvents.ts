@@ -4,9 +4,7 @@
  */
 export let WidgetRuntimeEvents = {
     runtime: {
-        contextUpdate: "runtime:context:update",
-        widgetSizeChange: "runtime:widget:size_change",
-        widgetRenderComplete: "runtime:widget:render_complete"
+        widgetSizeChange: "runtime:widget:size_change"
     },
     workspace: {
         stubSizeChange: "workspace:stub:size_change",

@@ -1,53 +1,55 @@
-import { WidgetRuntime } from "./WidgetRuntime"
-import { WidgetConfig, WidgetSize } from "./WidgetConfig";
-import { WidgetSection } from "./WidgetSection";
 import { SimpleEventEmitter } from "se-emitter"
+import { WidgetConfig } from "./WidgetConfig";
+import { LayoutMode } from "./LayoutMode";
 /**
  * 小组件实例
  */
-export interface WidgetInstance extends WidgetConfig {
-    catelogText: string
-    typeText: string
-    render(container: HTMLDivElement): PromiseLike<void>;
-    bind(runtime: WidgetRuntime): void;
+export interface WidgetInstance {
+    header: string
+    init(element:HTMLDivElement, renderOptions: InstanceInitOptions): void;
+    onSizeChange(ev: SizeChangeEventArgs): void;
+    type: string;
 }
 
+export type SizeChangeEventArgs = { 
+    layoutMode: LayoutMode, 
+    wrapper: HTMLDivElement, 
+    element: HTMLDivElement 
+}
+export type InstanceInitOptions = {
+    config: WidgetConfig,
+    layoutMode: LayoutMode, 
+    wrapper: HTMLDivElement, 
+    element: HTMLDivElement
+}
 /**
  * 小组件配置用桩
  */
 export interface WidgetConfigStub {
-    catelog: string
     type: string
-    catelogText: string
-    typeText: string
-    bind(source: SimpleEventEmitter): void
-    render(container: HTMLDivElement): void
-    toProfile(): WidgetSection
-    //commands: string[]
-    //executeCommand(command: string): void
-    //availableSizes: WidgetSize[]
-    getRow(): number
-    getCol(): number
-    getRowspan(): number
-    getColspan(): number
-    setRow(value:number): void
-    setCol(value:number): void
-    setRowspan(value:number): void
-    setColspan(value:number): void
+    position: Position
+    
+    init(container: HTMLDivElement, options: ConfigInitOptions): void
+    serialize(): WidgetConfig
+}
+
+export type ConfigInitOptions = {
+    config?: WidgetConfig,
+    wrapper: HTMLDivElement, 
+    element: HTMLDivElement
 }
 
 /**
  * 小组件定义
  */
 export interface WidgetDefinition {
-    catelog: string
     type: string;
     /**
      * 创建小组件实例
      */
-    createInstance(config: WidgetConfig): WidgetInstance;
+    createInstance(): WidgetInstance;
     /**
      * 创建配置用桩
      */
-    createConfigStub(config?: WidgetSection): WidgetConfigStub;
+    createConfigStub(config?: WidgetConfig): WidgetConfigStub;
 }

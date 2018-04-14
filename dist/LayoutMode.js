@@ -1,7 +1,9 @@
 /**
  * 布局模式
  */
-export var LayoutMode;
+/**
+ * 布局模式
+ */ export var LayoutMode;
 (function (LayoutMode) {
     /**
      * 网格布局

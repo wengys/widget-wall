@@ -1,6 +1,6 @@
 {
   "name": "widget-wall",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -14,13 +14,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jquery": "^2.0.41",
-    "@types/underscore": "^1.8.3",
+    "@types/jquery": "^3.3.1",
     "typescript": "^2.5.3"
   },
   "dependencies": {
-    "jquery": "^1.12.4",
-    "se-emitter": "^1.0.0",
-    "underscore": "^1.8.3"
+    "jquery": "^3.3.1",
+    "se-emitter": "^1.0.0"
   }
 }

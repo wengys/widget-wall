@@ -9,35 +9,45 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import * as $ from "jquery";
-import * as _ from "underscore";
 import { WidgetsFactory } from "./WidgetsFactory";
-import { WidgetRuntime } from "./WidgetRuntime";
 import { LayoutMode, isGrid } from "./LayoutMode";
-import { WidgetRuntimeEvents } from "./WidgetRuntimeEvents";
+import { SimpleEventEmitter } from "se-emitter";
 /**
  * 小组件容器
  */
-var WidgetContainer = /** @class */ (function (_super) {
+var WidgetContainer = (function (_super) {
     __extends(WidgetContainer, _super);
-    function WidgetContainer(widgetContainerId, widgetDefinitions, context) {
-        var _this = _super.call(this, context) || this;
+    function WidgetContainer(widgetContainerId, widgetDefinitions) {
+        var _this = _super.call(this) || this;
         _this.widgetContainerId = widgetContainerId;
+        _this.cols = 24;
+        _this.rows = 0;
         _this.widgets = [];
+        _this.widgetNodes = [];
+        _this.widgetConfigs = [];
+        _this.displayMode = LayoutMode.grid;
         _this.widgetsFactory = new WidgetsFactory(widgetDefinitions);
         _this.flowThreshold = window.matchMedia($(_this.widgetContainerId).data("flow-threshold"));
         $(_this.widgetContainerId).addClass("widget-container");
         return _this;
-        // this.initTooltip();
     }
     /**
      * 初始化
      * @param widgets 小组件
      */
-    WidgetContainer.prototype.init = function (widgetConfig) {
+    WidgetContainer.prototype.init = function (containerConfig) {
         var _this = this;
-        this.rows = widgetConfig.rows;
-        //TODO: 根据权限过滤
-        this.widgets = _.map(widgetConfig.widgets, function (wcfg) { return _this.widgetsFactory.create(wcfg, _this); });
+        this.rows = containerConfig.rows;
+        this.cols = containerConfig.cols;
+        this.widgetConfigs = containerConfig.widgets;
+        if (containerConfig.maxWidth) {
+            $(this.widgetContainerId).css("maxWidth", containerConfig.maxWidth);
+        }
+        if (containerConfig.minWidth) {
+            $(this.widgetContainerId).css("minWidth", containerConfig.minWidth);
+        }
+        this.widgets = containerConfig.widgets.map(function (wcfg) { return _this.widgetsFactory.create(wcfg /*, this*/); });
+        this.widgetNodes = [];
         this.render();
         $(window).on("resize", function () {
             _this.refreshView(true);
@@ -54,13 +64,17 @@ var WidgetContainer = /** @class */ (function (_super) {
     };
     WidgetContainer.prototype.renderWidgets = function (widgets) {
         var _this = this;
-        _.each(widgets, function (widget) {
-            var $widgetContainer = $("#" + widget.id);
-            var $widget = $($widgetContainer.find(".widget").get(0));
-            widget.render($widget.get(0)).then(function () {
-                $widget.removeClass("widget-loading");
-                _this.trigger(WidgetRuntimeEvents.runtime.widgetRenderComplete, widget);
-            });
+        widgets.forEach(function (widget, idx) {
+            var $widgetWrapper = $(_this.widgetNodes[idx]);
+            var widgetConfig = _this.widgetConfigs[idx];
+            var $widget = $widgetWrapper.find(".widget");
+            var renderOptions = {
+                config: widgetConfig,
+                layoutMode: _this.displayMode,
+                wrapper: $widgetWrapper.get(0),
+                element: $widget.get(0)
+            };
+            widget.init(renderOptions.element, renderOptions);
         });
     };
     /**
@@ -69,13 +83,15 @@ var WidgetContainer = /** @class */ (function (_super) {
      */
     WidgetContainer.prototype.appendWidgetNodes = function (widgets) {
         var _this = this;
-        _.each(widgets, function (widget) {
-            var $widgetContainer = $("<div id=\"" + widget.id + "\" class=\"widget-wrapper\"><div class=\"widget widget-catelog-" + widget.catelog + " widget-" + widget.type + " widget-loading\"></div></div>");
-            var $widget = $($widgetContainer.find(".widget").get(0));
-            if (widget.typeText) {
-                $widgetContainer.prepend("<div class=\"widget-head\">" + widget.typeText + "</div>").addClass("widget-title-padding");
+        widgets.forEach(function (widget) {
+            var $widgetWrapper = $("<div class=\"widget-wrapper\"><div class=\"widget widget-" + widget.type + "\"></div></div>");
+            var $widget = $($widgetWrapper.find(".widget").get(0));
+            var header = widget.header;
+            if (header) {
+                $widgetWrapper.prepend("<div class=\"widget-head\">" + header + "</div>").addClass("widget-title-padding");
             }
-            $(_this.widgetContainerId).append($widgetContainer);
+            $(_this.widgetContainerId).append($widgetWrapper);
+            _this.widgetNodes.push($widgetWrapper[0]);
         });
     };
     /**
@@ -83,7 +99,7 @@ var WidgetContainer = /** @class */ (function (_super) {
      */
     WidgetContainer.prototype.getUnitSize = function () {
         var totalWidth = $(this.widgetContainerId).width();
-        var cols = $(this.widgetContainerId).data("cols") - 0 || WidgetContainer.defaultCols;
+        var cols = this.cols;
         var unitSize = {
             height: totalWidth / cols,
             width: totalWidth / cols
@@ -111,12 +127,13 @@ var WidgetContainer = /** @class */ (function (_super) {
     /**
      * 更新小组件样式
      */
-    WidgetContainer.prototype.updateWidgetStyle = function (widget, unitSize) {
+    WidgetContainer.prototype.updateWidgetStyle = function (widget, widgetIndex, unitSize) {
         if (isGrid(this.displayMode)) {
-            $("#" + widget.id).css("top", widget.display.row * unitSize.height + "px")
-                .css("left", widget.display.col * unitSize.width + "px")
-                .css("width", widget.display.colspan * unitSize.width + "px")
-                .css("height", widget.display.rowspan * unitSize.height + "px");
+            var widgetConfig = this.widgetConfigs[widgetIndex];
+            $(this.widgetNodes[widgetIndex]).css("top", widgetConfig.position.row * unitSize.height + "px")
+                .css("left", widgetConfig.position.col * unitSize.width + "px")
+                .css("width", widgetConfig.position.colspan * unitSize.width + "px")
+                .css("height", widgetConfig.position.rowspan * unitSize.height + "px");
         }
     };
     /**
@@ -124,8 +141,8 @@ var WidgetContainer = /** @class */ (function (_super) {
      */
     WidgetContainer.prototype.updateWidgetStyles = function (gridUnitSize) {
         var _this = this;
-        _.each(this.widgets, function (widget) {
-            _this.updateWidgetStyle(widget, gridUnitSize);
+        this.widgets.forEach(function (widget, idx) {
+            _this.updateWidgetStyle(widget, idx, gridUnitSize);
         });
     };
     /**
@@ -139,8 +156,18 @@ var WidgetContainer = /** @class */ (function (_super) {
             this.notifyWidgetsSizeChange(this.displayMode);
         }
     };
-    WidgetContainer.defaultCols = 24;
+    WidgetContainer.prototype.notifyWidgetsSizeChange = function (layoutMode) {
+        var _this = this;
+        this.widgets.forEach(function (w, idx) {
+            var wrapper = _this.widgetNodes[idx];
+            w.onSizeChange({
+                layoutMode: layoutMode,
+                wrapper: wrapper,
+                element: $(wrapper).find(".widget").get(0)
+            });
+        });
+    };
     return WidgetContainer;
-}(WidgetRuntime));
+}(SimpleEventEmitter));
 export { WidgetContainer };
 //# sourceMappingURL=WidgetContainer.js.map

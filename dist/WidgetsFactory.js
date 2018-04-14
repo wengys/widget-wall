@@ -1,20 +1,19 @@
-import * as _ from "underscore";
-var WidgetsFactory = /** @class */ (function () {
+import * as util from "./util";
+var WidgetsFactory = (function () {
     function WidgetsFactory(widgetFactories) {
         this.widgetFactories = widgetFactories;
     }
-    WidgetsFactory.prototype.create = function (instanceConfig, runtime) {
+    WidgetsFactory.prototype.create = function (instanceConfig) {
         var widgetType = instanceConfig.type;
-        var factory = _.find(this.widgetFactories, function (w) { return w.type == widgetType; });
+        var factory = util.firstOrNull(this.widgetFactories, function (w) { return w.type == widgetType; });
         if (!factory) {
             throw new Error("unknown widget: " + widgetType);
         }
-        var instance = factory.createInstance(instanceConfig);
-        instance.bind(runtime);
+        var instance = factory.createInstance();
         return instance;
     };
     WidgetsFactory.prototype.createStub = function (widgetType, instanceConfig) {
-        var factory = _.find(this.widgetFactories, function (w) { return w.type == widgetType; });
+        var factory = util.firstOrNull(this.widgetFactories, function (w) { return w.type == widgetType; });
         if (!factory) {
             throw new Error("unknown widget: " + widgetType);
         }

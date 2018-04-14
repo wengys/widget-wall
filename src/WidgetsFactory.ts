@@ -1,8 +1,6 @@
-import * as _ from "underscore"
 import { WidgetDefinition, WidgetInstance, WidgetConfigStub } from "./WidgetInstance";
+import * as util from "./util"
 import { WidgetConfig } from "./WidgetConfig";
-import { WidgetRuntime } from "./WidgetRuntime";
-import { WidgetSection } from "./WidgetSection";
 
 export class WidgetsFactory {
     private widgetFactories: WidgetDefinition[];
@@ -11,19 +9,18 @@ export class WidgetsFactory {
         this.widgetFactories = widgetFactories;
     }
 
-    public create(instanceConfig: WidgetConfig, runtime: WidgetRuntime): WidgetInstance {
+    public create(instanceConfig: WidgetConfig): WidgetInstance {
         let widgetType = instanceConfig.type;
-        let factory = _.find(this.widgetFactories, (w) => w.type == widgetType)
+        let factory = util.firstOrNull(this.widgetFactories,(w)=>w.type == widgetType)
         if (!factory) {
             throw new Error("unknown widget: " + widgetType);
         }
-        let instance = factory.createInstance(instanceConfig);
-        instance.bind(runtime)
+        let instance = factory.createInstance();
         return instance;
     }
 
-    public createStub(widgetType: string, instanceConfig?: WidgetSection): WidgetConfigStub {
-        let factory = _.find(this.widgetFactories, (w) => w.type == widgetType)
+    public createStub(widgetType: string, instanceConfig?: WidgetConfig): WidgetConfigStub {
+        let factory = util.firstOrNull(this.widgetFactories,(w)=>w.type == widgetType)        
         if (!factory) {
             throw new Error("unknown widget: " + widgetType);
         }

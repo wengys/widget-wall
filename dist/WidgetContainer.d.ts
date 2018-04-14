@@ -1,25 +1,25 @@
-import { WidgetRuntime } from "./WidgetRuntime";
 import { WidgetContainerConfig } from "./WidgetConfig";
 import { WidgetDefinition } from "./WidgetInstance";
+import { SimpleEventEmitter } from "se-emitter";
 /**
  * 小组件容器
  */
-export declare class WidgetContainer extends WidgetRuntime {
+export declare class WidgetContainer extends SimpleEventEmitter {
     private widgetContainerId;
-    private static defaultCols;
+    private cols;
     private flowThreshold;
     private rows;
     private widgets;
+    private widgetNodes;
+    private widgetConfigs;
     private displayMode;
     private widgetsFactory;
-    constructor(widgetContainerId: string, widgetDefinitions: WidgetDefinition[], context: {
-        [indexer: string]: any;
-    });
+    constructor(widgetContainerId: string, widgetDefinitions: WidgetDefinition[]);
     /**
      * 初始化
      * @param widgets 小组件
      */
-    init(widgetConfig: WidgetContainerConfig): void;
+    init(containerConfig: WidgetContainerConfig): void;
     /**
      * 渲染小组件
      * @param widgets
@@ -42,7 +42,7 @@ export declare class WidgetContainer extends WidgetRuntime {
     /**
      * 更新小组件样式
      */
-    private updateWidgetStyle(widget, unitSize);
+    private updateWidgetStyle(widget, widgetIndex, unitSize);
     /**
      * 更新小组件样式
      */
@@ -51,4 +51,5 @@ export declare class WidgetContainer extends WidgetRuntime {
      * 刷新视图
      */
     private refreshView(notifyChange);
+    private notifyWidgetsSizeChange(layoutMode);
 }

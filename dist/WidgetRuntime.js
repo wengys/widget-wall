@@ -13,7 +13,7 @@ import { WidgetRuntimeEvents } from "./WidgetRuntimeEvents";
 /**
  * 小组件运行时
  */
-var WidgetRuntime = /** @class */ (function (_super) {
+var WidgetRuntime = (function (_super) {
     __extends(WidgetRuntime, _super);
     function WidgetRuntime(ctx) {
         var _this = _super.call(this) || this;
