@@ -1,7 +1,7 @@
 /**
  * 小组件事件列表
  */
-export var WidgetRuntimeEvents = {
+export let WidgetRuntimeEvents = {
     runtime: {
         widgetSizeChange: "runtime:widget:size_change"
     },
