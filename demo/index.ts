@@ -2,6 +2,9 @@ import * as WidgetWall from "../src/index"
 import { InstanceInitOptions } from "../src/index";
 
 class DummyInstance implements WidgetWall.WidgetInstance {
+    onDestroy(ev: WidgetWall.DestroyEventArgs): void {
+        console.log("destroy")
+    }
     onSizeChange(ev: WidgetWall.SizeChangeEventArgs): void {
         let oh = ev.wrapper.offsetHeight;
         let ow = ev.wrapper.offsetWidth;
@@ -89,3 +92,14 @@ cfg2.cols = 26
 cfg2.maxWidth = null
 cfg2.minWidth = null
 container2.init(cfg2)
+
+function destroy() {
+    container.destroy()
+}
+
+function load() {
+    container.init(cfg2)
+}
+
+document.getElementById("destroy")!.addEventListener("click",destroy);
+document.getElementById("load")!.addEventListener("click",load);
