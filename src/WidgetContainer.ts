@@ -28,13 +28,13 @@ export class WidgetContainer extends SimpleEventEmitter {
     private widgetsFactory: WidgetsFactory;
 
     constructor(
-        private widgetContainerId: string,
+        private widgetContainer: string | HTMLDivElement,
         widgetDefinitions: WidgetDefinition[]
     ) {
         super()
         this.widgetsFactory = new WidgetsFactory(widgetDefinitions);
-        this.flowThreshold = window.matchMedia($(this.widgetContainerId).data("flow-threshold"));
-        $(this.widgetContainerId).addClass("widget-container")
+        this.flowThreshold = window.matchMedia($(this.widgetContainer).data("flow-threshold"));
+        $(this.widgetContainer).addClass("widget-container")
     }
 
     /**
@@ -46,21 +46,38 @@ export class WidgetContainer extends SimpleEventEmitter {
         this.cols = containerConfig.cols
         this.widgetConfigs = containerConfig.widgets;
 
+        this.destroy()
+
         if (containerConfig.maxWidth) {
-            $(this.widgetContainerId).css("maxWidth",containerConfig.maxWidth)
+            $(this.widgetContainer).css("maxWidth", containerConfig.maxWidth)
+        } else {
+            $(this.widgetContainer).css("maxWidth", "")
         }
         if (containerConfig.minWidth) {
-            $(this.widgetContainerId).css("minWidth",containerConfig.minWidth)
+            $(this.widgetContainer).css("minWidth", containerConfig.minWidth)
+        } else {
+            $(this.widgetContainer).css("minWidth", "")
         }
 
         this.widgets = containerConfig.widgets.map((wcfg) => this.widgetsFactory.create(wcfg/*, this*/));
-        
+
         this.widgetNodes = [];
         this.render();
 
         $(window).on("resize", () => {
             this.refreshView(true);
         })
+    }
+
+    /**
+     * 销毁小组件
+     */
+    public destroy() {
+        this.widgets.forEach((w, idx) => {
+            let ev = { element: this.widgetNodes[idx] }
+            w.onDestroy(ev)
+        })
+        $(this.widgetContainer).empty()
     }
 
     /**
@@ -73,8 +90,8 @@ export class WidgetContainer extends SimpleEventEmitter {
         this.renderWidgets(this.widgets)
     }
 
-    private renderWidgets(widgets:WidgetInstance[]) {
-        widgets.forEach((widget,idx) => {
+    private renderWidgets(widgets: WidgetInstance[]) {
+        widgets.forEach((widget, idx) => {
             let $widgetWrapper = $(this.widgetNodes[idx]);
             let widgetConfig = this.widgetConfigs[idx]
             let $widget = $widgetWrapper.find(".widget");
@@ -101,7 +118,7 @@ export class WidgetContainer extends SimpleEventEmitter {
             if (header) {
                 $widgetWrapper.prepend(`<div class="widget-head">${header}</div>`).addClass("widget-title-padding");
             }
-            $(this.widgetContainerId).append($widgetWrapper);
+            $(this.widgetContainer).append($widgetWrapper);
             this.widgetNodes.push($widgetWrapper[0] as HTMLDivElement)
         });
     }
@@ -110,7 +127,7 @@ export class WidgetContainer extends SimpleEventEmitter {
      * 获取网格单位宽高
      */
     private getUnitSize(): UnitSize {
-        let totalWidth = <number>$(this.widgetContainerId).width();
+        let totalWidth = <number>$(this.widgetContainer).width();
         let cols = this.cols
         let unitSize: UnitSize = {
             height: totalWidth / cols,
@@ -124,24 +141,24 @@ export class WidgetContainer extends SimpleEventEmitter {
     private updateDisplayMode(gridUnitSize: UnitSize): LayoutMode {
         if (!this.flowThreshold.matches) {
             let containerHeight = this.rows * gridUnitSize.height + "px";
-            $(this.widgetContainerId)
+            $(this.widgetContainer)
                 .css("position", "relative")
                 .css("height", containerHeight).removeClass("widget-container-flow").addClass("widget-container-grid")
-            $(this.widgetContainerId).find(">div").css("position", "absolute");
+            $(this.widgetContainer).find(">div").css("position", "absolute");
 
             return LayoutMode.grid
         }
         else {
-            $(this.widgetContainerId).removeAttr("style").addClass("widget-container-flow").removeClass("widget-container-grid")
-            $(this.widgetContainerId).find(">div").removeAttr("style");
-            
+            $(this.widgetContainer).removeAttr("style").addClass("widget-container-flow").removeClass("widget-container-grid")
+            $(this.widgetContainer).find(">div").removeAttr("style");
+
             return LayoutMode.flow
         }
     }
     /**
      * 更新小组件样式
      */
-    private updateWidgetStyle(widget: WidgetInstance, widgetIndex:number, unitSize: UnitSize) {
+    private updateWidgetStyle(widget: WidgetInstance, widgetIndex: number, unitSize: UnitSize) {
         if (isGrid(this.displayMode)) {
             let widgetConfig = this.widgetConfigs[widgetIndex]
             $(this.widgetNodes[widgetIndex]).css("top", widgetConfig.position.row * unitSize.height + "px")
@@ -154,15 +171,15 @@ export class WidgetContainer extends SimpleEventEmitter {
      * 更新小组件样式
      */
     private updateWidgetStyles(gridUnitSize: UnitSize): void {
-        this.widgets.forEach((widget,idx) => {
-            this.updateWidgetStyle(widget,idx, gridUnitSize)
+        this.widgets.forEach((widget, idx) => {
+            this.updateWidgetStyle(widget, idx, gridUnitSize)
         });
     }
 
     /**
      * 刷新视图
      */
-    private refreshView(notifyChange:boolean): void {
+    private refreshView(notifyChange: boolean): void {
         let gridUnitSize = this.getUnitSize();
         this.displayMode = this.updateDisplayMode(gridUnitSize);
         this.updateWidgetStyles(gridUnitSize);
@@ -172,10 +189,10 @@ export class WidgetContainer extends SimpleEventEmitter {
     }
 
     private notifyWidgetsSizeChange(layoutMode: LayoutMode): void {
-        this.widgets.forEach((w,idx)=> {
+        this.widgets.forEach((w, idx) => {
             let wrapper = this.widgetNodes[idx]
             w.onSizeChange({
-                layoutMode:layoutMode,
+                layoutMode: layoutMode,
                 wrapper: wrapper,
                 element: <HTMLDivElement>$(wrapper).find(".widget").get(0)
             })
