@@ -1,4 +1,4 @@
-﻿import * as $ from "jquery"
+﻿import $ from "jquery"
 import { WidgetsFactory } from "./WidgetsFactory"
 import { WidgetContainerConfig, WidgetConfig } from "./WidgetConfig";
 import { WidgetInstance, WidgetDefinition } from "./WidgetInstance";
