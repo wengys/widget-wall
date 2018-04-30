@@ -4,23 +4,23 @@
     "strict": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
-    // "lib": [
-    //   "dom",
-    //   "es6"
-    // ],
+    "lib": [
+      "dom",
+      "es5"
+    ],
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "target": "es6",
-    "module": "commonjs",    
-    // "moduleResolution": "node",
-    "esModuleInterop": true,
-    "outDir": "lib"
+    "target": "es5",
+    "module": "es2015",    
+    "moduleResolution": "node",
+    "outDir": "dist"
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "demo"
   ]
 }

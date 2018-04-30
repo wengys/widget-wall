@@ -2,11 +2,10 @@
   "name": "widget-wall",
   "version": "2.1.2",
   "description": "",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "type-check": "tsc --noEmit",
-    "build": "tsc --emitDeclarationOnly && babel src --source-maps --out-dir lib --extensions \".ts,.tsx\""
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -16,16 +15,10 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jquery": "^3.3.1",
-    "@babel/cli": "^7.0.0-beta.46",
-    "@babel/core": "^7.0.0-beta.46",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.46",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.46",
-    "@babel/preset-env": "^7.0.0-beta.46",
-    "@babel/preset-typescript": "^7.0.0-beta.46",
     "typescript": "^2.5.3"
   },
   "dependencies": {
     "jquery": "^3.3.1",
-    "se-emitter": "^2.0.1"
+    "se-emitter": "^2.1.0"
   }
 }
