@@ -1,5 +1,5 @@
 import * as util from "./util";
-var WidgetsFactory = (function () {
+var WidgetsFactory = /** @class */ (function () {
     function WidgetsFactory(widgetFactories) {
         this.widgetFactories = widgetFactories;
     }

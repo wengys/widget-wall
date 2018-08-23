@@ -99,7 +99,7 @@ export class WidgetContainer extends SimpleEventEmitter {
 
             let header = widget.header
             if (header) {
-                $widgetWrapper.prepend(`<div class="widget-head">${header}</div>`).addClass("widget-title-padding");
+                $widgetWrapper.prepend(`<div class="widget-head"><span class="widget-head-text">${header}</span></div>`).addClass("widget-title-padding");
             }
             $(this.widgetContainerId).append($widgetWrapper);
             this.widgetNodes.push($widgetWrapper[0] as HTMLDivElement)

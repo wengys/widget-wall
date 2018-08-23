@@ -9,7 +9,7 @@ export declare enum LayoutMode {
     /**
      * 流式布局
      */
-    flow = 1,
+    flow = 1
 }
 /**
  * 是否为网格布局

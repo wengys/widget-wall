@@ -24,32 +24,32 @@ export declare class WidgetContainer extends SimpleEventEmitter {
      * 渲染小组件
      * @param widgets
      */
-    private render();
-    private renderWidgets(widgets);
+    private render;
+    private renderWidgets;
     /**
      * 插入小组件节点
      * @param widgets 小组件
      */
-    private appendWidgetNodes(widgets);
+    private appendWidgetNodes;
     /**
      * 获取网格单位宽高
      */
-    private getUnitSize();
+    private getUnitSize;
     /**
      * 更新显示模式
      */
-    private updateDisplayMode(gridUnitSize);
+    private updateDisplayMode;
     /**
      * 更新小组件样式
      */
-    private updateWidgetStyle(widget, widgetIndex, unitSize);
+    private updateWidgetStyle;
     /**
      * 更新小组件样式
      */
-    private updateWidgetStyles(gridUnitSize);
+    private updateWidgetStyles;
     /**
      * 刷新视图
      */
-    private refreshView(notifyChange);
-    private notifyWidgetsSizeChange(layoutMode);
+    private refreshView;
+    private notifyWidgetsSizeChange;
 }

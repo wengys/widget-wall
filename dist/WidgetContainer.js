@@ -1,7 +1,10 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -15,7 +18,7 @@ import { SimpleEventEmitter } from "se-emitter";
 /**
  * 小组件容器
  */
-var WidgetContainer = (function (_super) {
+var WidgetContainer = /** @class */ (function (_super) {
     __extends(WidgetContainer, _super);
     function WidgetContainer(widgetContainerId, widgetDefinitions) {
         var _this = _super.call(this) || this;
@@ -88,7 +91,7 @@ var WidgetContainer = (function (_super) {
             var $widget = $($widgetWrapper.find(".widget").get(0));
             var header = widget.header;
             if (header) {
-                $widgetWrapper.prepend("<div class=\"widget-head\">" + header + "</div>").addClass("widget-title-padding");
+                $widgetWrapper.prepend("<div class=\"widget-head\"><span class=\"widget-head-text\">" + header + "</span></div>").addClass("widget-title-padding");
             }
             $(_this.widgetContainerId).append($widgetWrapper);
             _this.widgetNodes.push($widgetWrapper[0]);
