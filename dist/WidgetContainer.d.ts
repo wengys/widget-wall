@@ -5,7 +5,7 @@ import { SimpleEventEmitter } from "se-emitter";
  * 小组件容器
  */
 export declare class WidgetContainer extends SimpleEventEmitter {
-    private widgetContainerId;
+    private widgetContainer;
     private cols;
     private flowThreshold;
     private rows;
@@ -14,12 +14,16 @@ export declare class WidgetContainer extends SimpleEventEmitter {
     private widgetConfigs;
     private displayMode;
     private widgetsFactory;
-    constructor(widgetContainerId: string, widgetDefinitions: WidgetDefinition[]);
+    constructor(widgetContainer: string | HTMLDivElement, widgetDefinitions: WidgetDefinition[]);
     /**
      * 初始化
      * @param widgets 小组件
      */
     init(containerConfig: WidgetContainerConfig): void;
+    /**
+     * 销毁小组件
+     */
+    destroy(): void;
     /**
      * 渲染小组件
      * @param widgets

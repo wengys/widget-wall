@@ -1,6 +1,6 @@
 {
   "name": "widget-wall",
-  "version": "2.0.1",
+  "version": "2.1.4",
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

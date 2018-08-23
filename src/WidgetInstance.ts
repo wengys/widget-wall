@@ -8,9 +8,13 @@ export interface WidgetInstance {
     header: string
     init(element:HTMLDivElement, renderOptions: InstanceInitOptions): void;
     onSizeChange(ev: SizeChangeEventArgs): void;
+    onDestroy(ev:DestroyEventArgs): void;
     type: string;
 }
 
+export type DestroyEventArgs = {
+    element: HTMLDivElement    
+}
 export type SizeChangeEventArgs = { 
     layoutMode: LayoutMode, 
     wrapper: HTMLDivElement, 
