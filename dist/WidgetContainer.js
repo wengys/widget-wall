@@ -30,8 +30,9 @@ var WidgetContainer = /** @class */ (function (_super) {
         _this.widgetConfigs = [];
         _this.displayMode = LayoutMode.grid;
         _this.widgetsFactory = new WidgetsFactory(widgetDefinitions);
-        _this.flowThreshold = window.matchMedia($(_this.widgetContainer).data("flow-threshold"));
-        $(_this.widgetContainer).addClass("widget-container");
+        _this.$widgetContailer = $(_this.widgetContainer);
+        _this.$widgetContailer.addClass("widget-container");
+        _this.flowThreshold = window.matchMedia(_this.$widgetContailer.data("flow-threshold"));
         return _this;
     }
     /**
@@ -45,16 +46,16 @@ var WidgetContainer = /** @class */ (function (_super) {
         this.widgetConfigs = containerConfig.widgets;
         this.destroy();
         if (containerConfig.maxWidth) {
-            $(this.widgetContainer).css("maxWidth", containerConfig.maxWidth);
+            this.$widgetContailer.css("maxWidth", containerConfig.maxWidth);
         }
         else {
-            $(this.widgetContainer).css("maxWidth", "");
+            this.$widgetContailer.css("maxWidth", "");
         }
         if (containerConfig.minWidth) {
-            $(this.widgetContainer).css("minWidth", containerConfig.minWidth);
+            this.$widgetContailer.css("minWidth", containerConfig.minWidth);
         }
         else {
-            $(this.widgetContainer).css("minWidth", "");
+            this.$widgetContailer.css("minWidth", "");
         }
         this.widgets = containerConfig.widgets.map(function (wcfg) { return _this.widgetsFactory.create(wcfg /*, this*/); });
         this.widgetNodes = [];
@@ -72,7 +73,7 @@ var WidgetContainer = /** @class */ (function (_super) {
             var ev = { element: _this.widgetNodes[idx] };
             w.onDestroy(ev);
         });
-        $(this.widgetContainer).empty();
+        this.$widgetContailer.empty();
     };
     /**
      * 渲染小组件
@@ -111,7 +112,7 @@ var WidgetContainer = /** @class */ (function (_super) {
             if (header) {
                 $widgetWrapper.prepend("<div class=\"widget-head\"><span class=\"widget-head-text\">" + header + "</span></div>").addClass("widget-title-padding");
             }
-            $(_this.widgetContainer).append($widgetWrapper);
+            _this.$widgetContailer.append($widgetWrapper);
             _this.widgetNodes.push($widgetWrapper[0]);
         });
     };
@@ -119,7 +120,7 @@ var WidgetContainer = /** @class */ (function (_super) {
      * 获取网格单位宽高
      */
     WidgetContainer.prototype.getUnitSize = function () {
-        var totalWidth = $(this.widgetContainer).width();
+        var totalWidth = this.$widgetContailer.width();
         var cols = this.cols;
         var unitSize = {
             height: totalWidth / cols,
@@ -133,15 +134,15 @@ var WidgetContainer = /** @class */ (function (_super) {
     WidgetContainer.prototype.updateDisplayMode = function (gridUnitSize) {
         if (!this.flowThreshold.matches) {
             var containerHeight = this.rows * gridUnitSize.height + "px";
-            $(this.widgetContainer)
+            this.$widgetContailer
                 .css("position", "relative")
                 .css("height", containerHeight).removeClass("widget-container-flow").addClass("widget-container-grid");
-            $(this.widgetContainer).find(">div").css("position", "absolute");
+            this.$widgetContailer.find(">div").css("position", "absolute");
             return LayoutMode.grid;
         }
         else {
-            $(this.widgetContainer).removeAttr("style").addClass("widget-container-flow").removeClass("widget-container-grid");
-            $(this.widgetContainer).find(">div").removeAttr("style");
+            this.$widgetContailer.removeAttr("style").addClass("widget-container-flow").removeClass("widget-container-grid");
+            this.$widgetContailer.find(">div").removeAttr("style");
             return LayoutMode.flow;
         }
     };

@@ -26,6 +26,7 @@ export class WidgetContainer extends SimpleEventEmitter {
     private widgetConfigs: WidgetConfig[] = [];
     private displayMode: LayoutMode = LayoutMode.grid;
     private widgetsFactory: WidgetsFactory;
+    private $widgetContailer: JQuery
 
     constructor(
         private widgetContainer: string | HTMLDivElement,
@@ -33,8 +34,9 @@ export class WidgetContainer extends SimpleEventEmitter {
     ) {
         super()
         this.widgetsFactory = new WidgetsFactory(widgetDefinitions);
-        this.flowThreshold = window.matchMedia($(this.widgetContainer).data("flow-threshold"));
-        $(this.widgetContainer).addClass("widget-container")
+        this.$widgetContailer = $(<any>this.widgetContainer)
+        this.$widgetContailer.addClass("widget-container")
+        this.flowThreshold = window.matchMedia(this.$widgetContailer.data("flow-threshold"));
     }
 
     /**
@@ -49,14 +51,14 @@ export class WidgetContainer extends SimpleEventEmitter {
         this.destroy()
 
         if (containerConfig.maxWidth) {
-            $(this.widgetContainer).css("maxWidth", containerConfig.maxWidth)
+            this.$widgetContailer.css("maxWidth", containerConfig.maxWidth)
         } else {
-            $(this.widgetContainer).css("maxWidth", "")
+            this.$widgetContailer.css("maxWidth", "")
         }
         if (containerConfig.minWidth) {
-            $(this.widgetContainer).css("minWidth", containerConfig.minWidth)
+            this.$widgetContailer.css("minWidth", containerConfig.minWidth)
         } else {
-            $(this.widgetContainer).css("minWidth", "")
+            this.$widgetContailer.css("minWidth", "")
         }
 
         this.widgets = containerConfig.widgets.map((wcfg) => this.widgetsFactory.create(wcfg/*, this*/));
@@ -77,7 +79,7 @@ export class WidgetContainer extends SimpleEventEmitter {
             let ev = { element: this.widgetNodes[idx] }
             w.onDestroy(ev)
         })
-        $(this.widgetContainer).empty()
+        this.$widgetContailer.empty()
     }
 
     /**
@@ -118,7 +120,7 @@ export class WidgetContainer extends SimpleEventEmitter {
             if (header) {
                 $widgetWrapper.prepend(`<div class="widget-head"><span class="widget-head-text">${header}</span></div>`).addClass("widget-title-padding");
             }
-            $(this.widgetContainer).append($widgetWrapper);
+            this.$widgetContailer.append($widgetWrapper);
             this.widgetNodes.push($widgetWrapper[0] as HTMLDivElement)
         });
     }
@@ -127,7 +129,7 @@ export class WidgetContainer extends SimpleEventEmitter {
      * 获取网格单位宽高
      */
     private getUnitSize(): UnitSize {
-        let totalWidth = <number>$(this.widgetContainer).width();
+        let totalWidth = <number>this.$widgetContailer.width();
         let cols = this.cols
         let unitSize: UnitSize = {
             height: totalWidth / cols,
@@ -141,16 +143,16 @@ export class WidgetContainer extends SimpleEventEmitter {
     private updateDisplayMode(gridUnitSize: UnitSize): LayoutMode {
         if (!this.flowThreshold.matches) {
             let containerHeight = this.rows * gridUnitSize.height + "px";
-            $(this.widgetContainer)
+            this.$widgetContailer
                 .css("position", "relative")
                 .css("height", containerHeight).removeClass("widget-container-flow").addClass("widget-container-grid")
-            $(this.widgetContainer).find(">div").css("position", "absolute");
+            this.$widgetContailer.find(">div").css("position", "absolute");
 
             return LayoutMode.grid
         }
         else {
-            $(this.widgetContainer).removeAttr("style").addClass("widget-container-flow").removeClass("widget-container-grid")
-            $(this.widgetContainer).find(">div").removeAttr("style");
+            this.$widgetContailer.removeAttr("style").addClass("widget-container-flow").removeClass("widget-container-grid")
+            this.$widgetContailer.find(">div").removeAttr("style");
 
             return LayoutMode.flow
         }

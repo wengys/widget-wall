@@ -14,6 +14,7 @@ export declare class WidgetContainer extends SimpleEventEmitter {
     private widgetConfigs;
     private displayMode;
     private widgetsFactory;
+    private $widgetContailer;
     constructor(widgetContainer: string | HTMLDivElement, widgetDefinitions: WidgetDefinition[]);
     /**
      * 初始化
