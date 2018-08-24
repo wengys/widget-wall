@@ -106,7 +106,7 @@ var WidgetContainer = /** @class */ (function (_super) {
     WidgetContainer.prototype.appendWidgetNodes = function (widgets) {
         var _this = this;
         widgets.forEach(function (widget) {
-            var $widgetWrapper = $("<div class=\"widget-wrapper\" widget-wrapper-" + widget.type + "\"><div class=\"widget widget-" + widget.type + "\"></div></div>");
+            var $widgetWrapper = $("<div class=\"widget-wrapper widget-wrapper-" + widget.type + "\"><div class=\"widget widget-" + widget.type + "\"></div></div>");
             var $widget = $($widgetWrapper.find(".widget").get(0));
             var header = widget.header;
             if (header) {

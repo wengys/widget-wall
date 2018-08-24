@@ -113,7 +113,7 @@ export class WidgetContainer extends SimpleEventEmitter {
      */
     private appendWidgetNodes(widgets: WidgetInstance[]) {
         widgets.forEach((widget) => {
-            let $widgetWrapper = $(`<div class="widget-wrapper" widget-wrapper-${widget.type}"><div class="widget widget-${widget.type}"></div></div>`);
+            let $widgetWrapper = $(`<div class="widget-wrapper widget-wrapper-${widget.type}"><div class="widget widget-${widget.type}"></div></div>`);
             let $widget = $($widgetWrapper.find(".widget").get(0));
 
             let header = widget.header
